@@ -1,4 +1,29 @@
+import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-import $ from 'jquery';
+
+$(document).ready(() => {
+  $('#weatherLocation').click(() => {
+    const city = $('#location').val();
+    $('#location').val("");
+
+    let request = new XMLHttpRequest();
+    const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=43b4c92e72185bfadc6333669acbb39e`;
+
+    request.onreadystatechange = () => {
+      if (this.readyState === 4 && this.status === 200) {
+        const response = JSON.parse(this.responseText);
+        getElements(response);
+      }
+    };
+
+    request.open("GET", url, true);
+    request.send();
+
+    getElements((response) => {
+      $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
+      $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
+    })
+  });
+});
