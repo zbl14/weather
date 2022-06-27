@@ -6,10 +6,13 @@ import './css/styles.css';
 $(document).ready(() => {
   $('#weatherLocation').click(() => {
     const city = $('#location').val();
+    const zipcode = $('#zipcode').val();
     $('#location').val("");
+    $('#zipcode').val("");
 
     let request = new XMLHttpRequest();
     const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
+    const urlZipcode = `https://api.openweathermap.org/data/2.5/weather?q=${zipcode}&appid=${process.env.API_KEY}`;
 
     request.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
@@ -21,6 +24,7 @@ $(document).ready(() => {
     };
 
     request.open("GET", url, true);
+    request.open("GET",urlZipcode, true);
     request.send();
     
     /* eslint-disable */
