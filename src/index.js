@@ -23,9 +23,6 @@ $(document).ready(() => {
       }
     };
 
-    console.log(city);
-    console.log(zipcode);
-
     if (city !== "" && zipcode === "") {
       request.open("GET", url, true);
     } else {
