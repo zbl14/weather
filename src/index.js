@@ -23,8 +23,14 @@ $(document).ready(() => {
       }
     };
 
-    request.open("GET", url, true);
-    request.open("GET",urlZipcode, true);
+    console.log(city);
+    console.log(zipcode);
+
+    if (city !== "" && zipcode === "") {
+      request.open("GET", url, true);
+    } else {
+      request.open("GET",urlZipcode, true);
+    }   
     request.send();
     
     /* eslint-disable */
