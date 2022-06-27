@@ -45,13 +45,15 @@ $(document).ready(() => {
     }
     if (city !== "" && zipcode === "") {   
       request.send();
-      request1.send()
+      request1.send();
     } else {
       request.send();
     }
     
     /* eslint-disable */
     const getElements = (response) => {
+      let currentTime = new Date(`${response.dt}`*1000)
+      $('.currentTime').text(`${currentTime}`)
       $('.showHumidity').text(`The humidity in ${city} is ${response.main.humidity}%`);
       $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
       let fahrenheitTemp= ((`${response.main.temp}` -273.15)*(9/5))+32
@@ -61,6 +63,8 @@ $(document).ready(() => {
     };
 
     const getElements1 = (response1) => {
+      let time = new Date(`${response1.list[0].dt}`*1000)
+      $('.next3Hour').text(`${time}`)
       $('.showHumidity3hour').text(`The humidity of next 3 hour is ${response1.list[0].main.humidity} %`);
     };
     /* eslint-enable */
