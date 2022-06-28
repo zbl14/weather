@@ -19,26 +19,26 @@ $(document).ready(() => {
     clearFields();
     let promise = WeatherService.getWeather(city, zipcode);  
     promise.then((response) => {
-      const body = JSON.parse(response);
-      let currentTime = new Date(`${body.dt}`*1000);
+      const currWeather = JSON.parse(response);
+      let currentTime = new Date(`${currWeather.dt}`*1000);
       $('.currentTime').text(`${currentTime}`);
-      $('.showHumidity').text(`The humidity in ${city} is ${body.main.humidity}%`);
-      $('.showTemp').text(`The temperature in Kelvins is ${body.main.temp} degrees.`);
-      let fahrenheitTemp = ((`${body.main.temp}` - 273.15) * (9 / 5)) + 32;
+      $('.showHumidity').text(`The humidity in ${city} is ${currWeather.main.humidity}%`);
+      $('.showTemp').text(`The temperature in Kelvins is ${currWeather.main.temp} degrees.`);
+      let fahrenheitTemp = ((`${currWeather.main.temp}` - 273.15) * (9 / 5)) + 32;
       $('.showFahrenheit').text(`The temperature in Fahrenheit is ${fahrenheitTemp.toFixed(2)} degrees.`);
-      $('.showLon').text(`The longitude is ${body.coord.lon}`);
-      $('.showLat').text(`The latitude is ${body.coord.lat}`);
+      $('.showLon').text(`The longitude is ${currWeather.coord.lon}`);
+      $('.showLat').text(`The latitude is ${currWeather.coord.lat}`);
     }, function(error) {
       $('.showErrors').text(`There was an error processing your request: ${error}`);
     });
-   
-    // const getElements1 = (response1) => {
-    //   let time = new Date(`${response1.list[0].dt}`*1000)
-    //   $('.next3Hour').text(`${time}`)
-    //   $('.showHumidity3hour').text(`The humidity of next 3 hour is ${response1.list[0].main.humidity} %`);
-    // };
   });
 });
+
+// const getElements1 = (response1) => {
+//   let time = new Date(`${response1.list[0].dt}`*1000)
+//   $('.next3Hour').text(`${time}`)
+//   $('.showHumidity3hour').text(`The humidity of next 3 hour is ${response1.list[0].main.humidity} %`);
+// };
 
 // let promise = new Promise((resolve, reject) => {
 //   let request = new XMLHttpRequest();
