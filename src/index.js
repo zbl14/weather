@@ -6,13 +6,14 @@ import './css/styles.css';
 $(document).ready(() => {
   $('#weatherLocation').click(() => {
     const city = $('#location').val();
-    // const zipcode = $('#zipcode').val();
+    const zipcode = $('#zipcode').val();
     $('#location').val("");
-    // $('#zipcode').val("");
+    $('#zipcode').val("");
 
-    let promise = new Promise(function(resolve, reject) {
+    let promise = new Promise((resolve, reject) => {
       let request = new XMLHttpRequest();
       const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
+      const urlZipcode = `https://api.openweathermap.org/data/2.5/weather?q=${zipcode}&appid=${process.env.API_KEY}`;
       request.onload = function () {
         if (this.status === 200) {
           resolve(request.response);
@@ -20,8 +21,20 @@ $(document).ready(() => {
           reject(request.response);
         }
       };
-      request.open("GET", url, true);
-      request.send();
+      // request.open("GET", url, true);
+      // request.send();
+      if (city !== "" && zipcode === "") {
+        request.open("GET", url, true);
+        // request1.open("GET", urlForcastByCity, true);
+      } else {
+        request.open("GET",urlZipcode, true);
+      }
+      if (city !== "" && zipcode === "") {   
+        request.send();
+        // request1.send();
+      } else {
+        request.send();
+      }
     });
   
 
@@ -65,8 +78,7 @@ $(document).ready(() => {
     //   request.send();
     // }
     
-  
-    promise.then(function(response) {
+    promise.then((response) => {
       const body = JSON.parse(response);
       let currentTime = new Date(`${body.dt}`*1000);
       $('.currentTime').text(`${currentTime}`);
