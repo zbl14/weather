@@ -32,13 +32,11 @@ $(document).ready(() => {
       $('.showErrors').text(`There was an error processing your request: ${error}`);
     });
    
-
     // const getElements1 = (response1) => {
     //   let time = new Date(`${response1.list[0].dt}`*1000)
     //   $('.next3Hour').text(`${time}`)
     //   $('.showHumidity3hour').text(`The humidity of next 3 hour is ${response1.list[0].main.humidity} %`);
     // };
-    
   });
 });
 

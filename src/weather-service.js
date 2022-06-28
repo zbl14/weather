@@ -11,8 +11,6 @@ export class WeatherService {
           reject(request.response);
         }
       };
-      // request.open("GET", url, true);
-      // request.send();
       if (city !== "" && zipcode === "") {
         request.open("GET", url, true);
         // request1.open("GET", urlForcastByCity, true);
