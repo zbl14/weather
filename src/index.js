@@ -12,27 +12,34 @@ let clearFields = () => {
   $('.showTemp').text("");
 };
 
-$(document).ready(() => {
-  $('#weatherLocation').click(() => {
+function getElements(response) {
+  if (response.main) {
+    // let currentTime = new Date(`${response.dt}`*1000);
+    // $('.currentTime').text(`${currentTime}`);
+    $('.showHumidity').text(`The humidity in ${response.name} is ${response.main.humidity}%`);
+    $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
+    // let fahrenheitTemp = ((`${response.main.temp}` - 273.15) * (9 / 5)) + 32;
+    // $('.showFahrenheit').text(`The temperature in Fahrenheit is ${fahrenheitTemp.toFixed(2)} degrees.`);
+    // $('.showLon').text(`The longitude is ${response.coord.lon}`);
+    // $('.showLat').text(`The latitude is ${response.coord.lat}`);
+  } else {
+    $('.showErrors').text(`There was an error processing your request: ${response.message}`);
+  }
+}
+
+
+$(document).ready(function() {
+  $('#weatherLocation').click(function() {
     let city = $('#location').val();
-    const zipcode = $('#zipcode').val();
+    // let zipcode = $('#zipcode').val();
     clearFields();
-    let promise = WeatherService.getWeather(city, zipcode);  
-    promise.then((response) => {
-      const currWeather = JSON.parse(response);
-      let currentTime = new Date(`${currWeather.dt}`*1000);
-      $('.currentTime').text(`${currentTime}`);
-      $('.showHumidity').text(`The humidity in ${city} is ${currWeather.main.humidity}%`);
-      $('.showTemp').text(`The temperature in Kelvins is ${currWeather.main.temp} degrees.`);
-      let fahrenheitTemp = ((`${currWeather.main.temp}` - 273.15) * (9 / 5)) + 32;
-      $('.showFahrenheit').text(`The temperature in Fahrenheit is ${fahrenheitTemp.toFixed(2)} degrees.`);
-      $('.showLon').text(`The longitude is ${currWeather.coord.lon}`);
-      $('.showLat').text(`The latitude is ${currWeather.coord.lat}`);
-    }, function(error) {
-      $('.showErrors').text(`There was an error processing your request: ${error}`);
-    });
+    WeatherService.getWeather(city)
+      .then(function(response) {
+        getElements(response);
+      });
   });
 });
+
 
 // const getElements1 = (response1) => {
 //   let time = new Date(`${response1.list[0].dt}`*1000)
