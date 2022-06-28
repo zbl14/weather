@@ -12,28 +12,28 @@ let clearFields = () => {
   $('.showTemp').text("");
 };
 
-function getElements(response) {
+let getElements = (response) => {
   if (response.main) {
-    // let currentTime = new Date(`${response.dt}`*1000);
-    // $('.currentTime').text(`${currentTime}`);
+    let currentTime = new Date(`${response.dt}`*1000);
+    $('.currentTime').text(`${currentTime}`);
     $('.showHumidity').text(`The humidity in ${response.name} is ${response.main.humidity}%`);
     $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
-    // let fahrenheitTemp = ((`${response.main.temp}` - 273.15) * (9 / 5)) + 32;
-    // $('.showFahrenheit').text(`The temperature in Fahrenheit is ${fahrenheitTemp.toFixed(2)} degrees.`);
-    // $('.showLon').text(`The longitude is ${response.coord.lon}`);
-    // $('.showLat').text(`The latitude is ${response.coord.lat}`);
+    let fahrenheitTemp = ((`${response.main.temp}` - 273.15) * (9 / 5)) + 32;
+    $('.showFahrenheit').text(`The temperature in Fahrenheit is ${fahrenheitTemp.toFixed(2)} degrees.`);
+    $('.showLon').text(`The longitude is ${response.coord.lon}`);
+    $('.showLat').text(`The latitude is ${response.coord.lat}`);
   } else {
     $('.showErrors').text(`There was an error processing your request: ${response.message}`);
   }
-}
+};
 
 
 $(document).ready(function() {
   $('#weatherLocation').click(function() {
     let city = $('#location').val();
-    // let zipcode = $('#zipcode').val();
+    let zipcode = $('#zipcode').val();
     clearFields();
-    WeatherService.getWeather(city)
+    WeatherService.getWeather(city, zipcode)
       .then(function(response) {
         getElements(response);
       });

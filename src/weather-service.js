@@ -1,15 +1,28 @@
 export class WeatherService {
-  static getWeather(city) {
-    return fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`)
-      .then(function(response) {
-        if (!response.ok) {
-          throw Error(response.statusText);
-        }
-        return response.json();
-      })
-      .catch(function(error) {
-        return error;
-      });
+  static getWeather(city,zipcode) {
+    if (city !== "" && zipcode === "") {
+      return fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`)
+        .then(function(response) {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch(function(error) {
+          return error;
+        });
+    } else {
+      return fetch(`https://api.openweathermap.org/data/2.5/weather?q=${zipcode}&appid=${process.env.API_KEY}`)
+        .then(function(response) {
+          if (!response.ok) {
+            throw Error(response.statusText);
+          }
+          return response.json();
+        })
+        .catch(function(error) {
+          return error;
+        });
+    }
   }
 }
 
