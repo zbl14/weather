@@ -23,20 +23,21 @@ let getElements = (response) => {
     $('.showLon').text(`The longitude is ${response.coord.lon}`);
     $('.showLat').text(`The latitude is ${response.coord.lat}`);
   } else {
-    $('.showErrors').text(`There was an error processing your request: ${response.message}`);
+    $('.showErrors').text(`There was an error processing your request: ${response}`);
   }
 };
 
+async function makeApiCall(city, zipcode) {
+  const response = await WeatherService.getWeather(city, zipcode);
+  getElements(response);
+}
 
 $(document).ready(function() {
   $('#weatherLocation').click(function() {
     let city = $('#location').val();
     let zipcode = $('#zipcode').val();
     clearFields();
-    WeatherService.getWeather(city, zipcode)
-      .then(function(response) {
-        getElements(response);
-      });
+    makeApiCall(city, zipcode);
   });
 });
 
