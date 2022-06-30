@@ -2,14 +2,15 @@ import $ from 'jquery';
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/styles.css';
-import { WeatherService } from './weather-service.js';
+import { WeatherService } from './services/weather-service.js';
+import { GiphyService } from './services/giphy-service';
 
 let clearFields = () => {
   $('#location').val("");
   $('#zipcode').val("");
-  $('.showErrors').text("");
   $('.showHumidity').text("");
   $('.showTemp').text("");
+  $('.showErrors').text("");
 };
 
 let getElements = (response) => {
@@ -27,9 +28,18 @@ let getElements = (response) => {
   }
 };
 
+let showGif = (response) => {
+  if (response) {
+    const url = response.data[0].images.downsized.url;
+    $('.showGif').html(`<img src='${url}'>`)
+  }
+}
+
 async function makeApiCall(city, zipcode) {
   const response = await WeatherService.getWeather(city, zipcode);
   getElements(response);
+  const giphy = await GiphyService.getGif(response.weather[0].description);
+  showGif(giphy);
 }
 
 $(document).ready(function() {
