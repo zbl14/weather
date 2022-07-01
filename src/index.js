@@ -31,12 +31,12 @@ let getElements = (response) => {
 let showGif = (response) => {
   if (response) {
     const url = response.data[0].images.downsized.url;
-    $('.showGif').html(`<img src='${url}'>`)
+    $('.showGif').html(`<img src='${url}'>`);
   }
-}
+};
 
-async function makeApiCall(city, zipcode) {
-  const response = await WeatherService.getWeather(city, zipcode);
+async function makeApiCall(query) {
+  const response = await WeatherService.getWeather(query);
   getElements(response);
   const giphy = await GiphyService.getGif(response.weather[0].description);
   showGif(giphy);
@@ -47,7 +47,11 @@ $(document).ready(function() {
     let city = $('#location').val();
     let zipcode = $('#zipcode').val();
     clearFields();
-    makeApiCall(city, zipcode);
+    if (city !== "" && zipcode === "") {
+      makeApiCall(city);
+    } else {
+      makeApiCall(zipcode);
+    }
   });
 });
 
