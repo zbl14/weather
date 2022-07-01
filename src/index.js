@@ -13,18 +13,23 @@ let clearFields = () => {
   $('.showErrors').text("");
 };
 
-let getElements = (response) => {
+let currentWeather = (response) => {
   if (response.main) {
     let currentTime = new Date(`${response.dt}`*1000);
+    let fahrenheitTemp = ((`${response.main.temp}` - 273.15) * (9 / 5)) + 32;
     $('.currentTime').text(`${currentTime}`);
     $('.showHumidity').text(`The humidity in ${response.name} is ${response.main.humidity}%`);
-    $('.showTemp').text(`The temperature in Kelvins is ${response.main.temp} degrees.`);
-    let fahrenheitTemp = ((`${response.main.temp}` - 273.15) * (9 / 5)) + 32;
-    $('.showFahrenheit').text(`The temperature in Fahrenheit is ${fahrenheitTemp.toFixed(2)} degrees.`);
-    $('.showLon').text(`The longitude is ${response.coord.lon}`);
-    $('.showLat').text(`The latitude is ${response.coord.lat}`);
+    $('.showTemp').text(`The temperature is ${fahrenheitTemp.toFixed(2)} degrees.`);
   } else {
     $('.showErrors').text(`There was an error processing your request: ${response}`);
+  }
+};
+
+let forecast5D3H = (response) => {
+  if (response.list) {
+    let fahrenheitTemp = ((`${response.list[0].main.temp}` - 273.15) * (9 / 5)) + 32;
+    $('.showHumidity3h').text(`The humidity in the next 3 hour is ${response.list[0].main.humidity}%.`);
+    $(`.showTemp3h`).text(`The temperature in the next 3 hour is is ${fahrenheitTemp.toFixed(2)} degrees.`);
   }
 };
 
@@ -37,9 +42,11 @@ let showGif = (response) => {
 
 async function makeApiCall(query) {
   const response = await WeatherService.getWeather(query);
-  getElements(response);
+  currentWeather(response);
   const giphy = await GiphyService.getGif(response.weather[0].description);
   showGif(giphy);
+  const forecast3H = await WeatherService.get5D3HForecast(query);
+  forecast5D3H(forecast3H);
 }
 
 $(document).ready(function() {
@@ -54,78 +61,3 @@ $(document).ready(function() {
     }
   });
 });
-
-
-// const getElements1 = (response1) => {
-//   let time = new Date(`${response1.list[0].dt}`*1000)
-//   $('.next3Hour').text(`${time}`)
-//   $('.showHumidity3hour').text(`The humidity of next 3 hour is ${response1.list[0].main.humidity} %`);
-// };
-
-// let promise = new Promise((resolve, reject) => {
-//   let request = new XMLHttpRequest();
-//   const url = `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.API_KEY}`;
-//   const urlZipcode = `https://api.openweathermap.org/data/2.5/weather?q=${zipcode}&appid=${process.env.API_KEY}`;
-//   request.onload = function () {
-//     if (this.status === 200) {
-//       resolve(request.response);
-//     } else {
-//       reject(request.response);
-//     }
-//   };
-//   // request.open("GET", url, true);
-//   // request.send();
-//   if (city !== "" && zipcode === "") {
-//     request.open("GET", url, true);
-//     // request1.open("GET", urlForcastByCity, true);
-//   } else {
-//     request.open("GET",urlZipcode, true);
-//   }
-//   if (city !== "" && zipcode === "") {   
-//     request.send();
-//     // request1.send();
-//   } else {
-//     request.send();
-//   }
-// });
-
-
-
-// let request1 = new XMLHttpRequest();
-
-// const urlZipcode = `https://api.openweathermap.org/data/2.5/weather?q=${zipcode}&appid=${process.env.API_KEY}`;
-// const urlForcastByCity = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${process.env.API_KEY}`;
-
-// request.onreadystatechange = function() {
-//   if (this.readyState === 4 && this.status === 200) {
-//     const response = JSON.parse(this.responseText);
-//     console.log(response);
-//     /* eslint-disable */
-//     getElements(response);
-//     /* eslint-enable */
-//   }
-// };
-
-// request1.onreadystatechange = function() {
-//   if (this.readyState === 4 && this.status === 200) {
-//     const response1 = JSON.parse(this.responseText);
-//     console.log(response1);
-//     /* eslint-disable */
-//     getElements1(response1);
-//     /* eslint-enable */
-//   }
-// };
-
-// if (city !== "" && zipcode === "") {
-//   request.open("GET", url, true);
-//   console.log(city);
-//   request1.open("GET", urlForcastByCity, true);
-// } else {
-//   request.open("GET",urlZipcode, true);
-// }
-// if (city !== "" && zipcode === "") {   
-//   request.send();
-//   request1.send();
-// } else {
-//   request.send();
-// }
